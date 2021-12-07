@@ -1,11 +1,11 @@
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 
 DATA_PATH = Path(__file__).resolve().parents[1] / "data"
 
 
-def read_input(path: Path) -> List[int]:
+def read_input(path: Path) -> List[Tuple[str, int]]:
     data = [elem.split(" ") for elem in path.read_text().strip("\n").split("\n")]
     return [(d, int(l)) for d, l in data]
 

@@ -90,6 +90,34 @@ fn parse_last_word_to_int(lines: &mut Lines) -> u32 {
 
 #[aoc_generator(day11)]
 pub fn input_generator(input: &str) -> VecDeque<Monkey> {
+    let input = "Monkey 0:
+  Starting items: 79, 98
+  Operation: new = old * 19
+  Test: divisible by 23
+    If true: throw to monkey 2
+    If false: throw to monkey 3
+
+Monkey 1:
+  Starting items: 54, 65, 75, 74
+  Operation: new = old + 6
+  Test: divisible by 19
+    If true: throw to monkey 2
+    If false: throw to monkey 0
+
+Monkey 2:
+  Starting items: 79, 60, 97
+  Operation: new = old * old
+  Test: divisible by 13
+    If true: throw to monkey 1
+    If false: throw to monkey 3
+
+Monkey 3:
+  Starting items: 74
+  Operation: new = old + 3
+  Test: divisible by 17
+    If true: throw to monkey 0
+    If false: throw to monkey 1
+";
     let paragraph: Vec<&str> = input.split("\n\n").collect();
     let mut res = VecDeque::new();
     for (monkey_id, p) in paragraph.into_iter().enumerate() {
@@ -121,7 +149,7 @@ fn do_one_round(monkeys: &mut VecDeque<Monkey>, count: &mut Vec<u32>) {
             *c = *c + 1;
             let item = monkey.items.pop_front().unwrap();
             let mut new = monkey.operation.exec(item);
-            new = new.div_euclid(3);
+            // new = new.div_euclid(3);
             let new_monkey: u32 = match new.checked_rem(monkey.divisor) == Some(0) {
                 true => monkey.true_index,
                 false => monkey.false_index,
@@ -147,6 +175,7 @@ pub fn solve_part1(monkeys: &VecDeque<Monkey>) -> u32 {
     for _ in 0..20 {
         do_one_round(&mut c, &mut count);
     }
+    dbg!(&count);
     count.sort();
     count.get(count.len() - 1).unwrap() * count.get(count.len() - 2).unwrap()
 }
